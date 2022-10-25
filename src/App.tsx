@@ -1,19 +1,15 @@
-import {
-  createBrowserRouter,
-  RouterProvider,
-  HashRouter,
-} from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./App.css";
 import MainMenu from "./components/MainMenu";
 import PlayScene from "./components/PlayScene";
-
+const path = "https://litlestuart.github.io/count-people-in-bus";
 const router = createBrowserRouter([
   {
-    path: "/",
+    path: path + "/",
     element: <MainMenu />,
   },
   {
-    path: "/start",
+    path: path + "/start",
     element: <PlayScene />,
   },
 ]);
