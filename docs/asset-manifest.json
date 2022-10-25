@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/count-people-in-bus/static/css/main.b4eb63f4.css",
-    "main.js": "/count-people-in-bus/static/js/main.0b01a1a8.js",
+    "main.js": "/count-people-in-bus/static/js/main.2f12c119.js",
     "index.html": "/count-people-in-bus/index.html",
     "main.b4eb63f4.css.map": "/count-people-in-bus/static/css/main.b4eb63f4.css.map",
-    "main.0b01a1a8.js.map": "/count-people-in-bus/static/js/main.0b01a1a8.js.map"
+    "main.2f12c119.js.map": "/count-people-in-bus/static/js/main.2f12c119.js.map"
   },
   "entrypoints": [
     "static/css/main.b4eb63f4.css",
-    "static/js/main.0b01a1a8.js"
+    "static/js/main.2f12c119.js"
   ]
 }
