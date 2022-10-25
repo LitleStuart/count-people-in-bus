@@ -1,0 +1,66 @@
+.container {
+  padding: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: space-between;
+  align-items: flex-start;
+  column-gap: 10px;
+  justify-content: space-between;
+  height: calc(100vh - 20px);
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  .videoMask {
+    align-self: stretch;
+    width: calc(100% - 10em - 20px);
+    border-radius: 1em;
+    overflow: hidden;
+    -webkit-transform: translateZ(0);
+
+    .player {
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  .controlsButton {
+    background: #ccc8ff;
+  }
+
+  .countButton {
+    background-color: #9086ff;
+    margin-top: -2.5em;
+  }
+
+  .button {
+    text-decoration: none;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    padding: 1em;
+    border-radius: 1em;
+    border: none;
+
+    span {
+      font-style: normal;
+      font-weight: 400;
+      font-size: 3em;
+      line-height: 1em;
+      color: rgba(0, 0, 0, 0.7);
+    }
+  }
+}
+
+h2 {
+  position: absolute;
+  z-index: 100;
+  top: 1.5em;
+  left: 50%;
+  transform: translateX(-50%);
+  margin: 0;
+  background-color: rgba(0, 0, 0, 0.2);
+  color: white;
+}

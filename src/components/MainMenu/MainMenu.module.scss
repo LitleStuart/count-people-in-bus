@@ -1,0 +1,32 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  justify-items: stretch;
+  align-items: center;
+  height: 100vh;
+}
+
+.title {
+  font-family: "Inter", sans-serif;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 32px;
+  line-height: 39px;
+}
+
+.startButton {
+  background: #9086ff;
+  border-radius: 20px;
+  width: 28%;
+  padding: 0.4em 0;
+  margin-top: 1em;
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 32px;
+  line-height: 39px;
+  text-align: center;
+  color: #ffffff;
+  text-decoration: none;
+}
