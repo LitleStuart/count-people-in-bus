@@ -1,14 +1,14 @@
 {
   "files": {
-    "main.css": "/static/css/main.fa32caed.css",
-    "main.js": "/static/js/main.ec5b517f.js",
-    "static/media/1.mov": "/static/media/1.e5414945a9c32279a43d.mov",
-    "index.html": "/index.html",
-    "main.fa32caed.css.map": "/static/css/main.fa32caed.css.map",
-    "main.ec5b517f.js.map": "/static/js/main.ec5b517f.js.map"
+    "main.css": "/count-people-in-bus/static/css/main.fa32caed.css",
+    "main.js": "/count-people-in-bus/static/js/main.ffa09baa.js",
+    "static/media/1.mov": "/count-people-in-bus/static/media/1.e5414945a9c32279a43d.mov",
+    "index.html": "/count-people-in-bus/index.html",
+    "main.fa32caed.css.map": "/count-people-in-bus/static/css/main.fa32caed.css.map",
+    "main.ffa09baa.js.map": "/count-people-in-bus/static/js/main.ffa09baa.js.map"
   },
   "entrypoints": [
     "static/css/main.fa32caed.css",
-    "static/js/main.ec5b517f.js"
+    "static/js/main.ffa09baa.js"
   ]
 }
