@@ -1,9 +1,9 @@
 .container {
   padding: 10px;
   display: flex;
-  flex-wrap: wrap;
-  align-content: space-between;
-  align-items: flex-start;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: stretch;
   column-gap: 10px;
   justify-content: space-between;
   height: calc(100vh - 20px);
@@ -13,16 +13,26 @@
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
-  .videoMask {
-    align-self: stretch;
-    width: calc(100% - 10em - 20px);
-    border-radius: 1em;
-    overflow: hidden;
-    -webkit-transform: translateZ(0);
 
-    .player {
-      width: 100%;
+  .col {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    .videoMask {
+      background-color: black;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      align-self: stretch;
+      width: calc(100vw - 10em - 40px);
       height: 100%;
+      border-radius: 1em;
+      overflow: hidden;
+
+      .player {
+        width: auto;
+      }
     }
   }
 
@@ -32,7 +42,6 @@
 
   .countButton {
     background-color: #9086ff;
-    margin-top: -2.5em;
   }
 
   .button {
