@@ -1,10 +1,21 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import styles from "./PlayScene.module.scss";
+import video from "../../resources/1.mov";
 
 const PlayScene = () => {
-  const [count, setCount] = React.useState(0);
+  const [count, setCount] = React.useState(9);
+  const [videoIsPlaying, setVideoIsPlaying] = React.useState(false);
+  const videoRef = React.useRef<HTMLVideoElement>(null);
 
+  const toggleVideo = () => {
+    if (videoIsPlaying) {
+      videoRef.current?.pause();
+    } else {
+      videoRef.current?.play();
+    }
+    setVideoIsPlaying(!videoIsPlaying);
+  };
   const incrementCount = () => {
     setCount(count + 1);
   };
@@ -30,15 +41,17 @@ const PlayScene = () => {
       </div>
       <div className={styles.col}>
         <div className={styles.videoMask}>
-          <video
-            src="https://github.com/litlestuart/count-people-in-bus/resources/1.mov"
-            className={styles.player}
-          ></video>
+          <video ref={videoRef} src={video} className={styles.player}></video>
         </div>
       </div>
       <div className={styles.col}>
-        <div className={`${styles.button} ${styles.controlsButton}`}>
-          <span className="material-icons-round">play_arrow</span>
+        <div
+          className={`${styles.button} ${styles.controlsButton}`}
+          onClick={toggleVideo}
+        >
+          <span className="material-icons-round">
+            {videoIsPlaying ? "pause" : "play_arrow"}
+          </span>
         </div>
         <div
           className={`${styles.button} ${styles.countButton}`}
