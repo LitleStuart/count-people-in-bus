@@ -16,27 +16,36 @@ const PlayScene = () => {
 
   return (
     <div className={styles.container}>
-      <Link to="/" className={`${styles.button} ${styles.controlsButton}`}>
-        <span className="material-icons-round">close</span>
-      </Link>
       <h2>People: {count}</h2>
-      <div className={styles.videoMask}>
-        <video src="" className={styles.player} controls></video>
+      <div className={styles.col}>
+        <Link to="/" className={`${styles.button} ${styles.controlsButton}`}>
+          <span className="material-icons-round">close</span>
+        </Link>
+        <div
+          className={`${styles.button} ${styles.countButton}`}
+          onClick={decrementCount}
+        >
+          <span className="material-icons-round">remove</span>
+        </div>
       </div>
-      <div className={`${styles.button} ${styles.controlsButton}`}>
-        <span className="material-icons-round">play_arrow</span>
+      <div className={styles.col}>
+        <div className={styles.videoMask}>
+          <video
+            src="https://github.com/litlestuart/count-people-in-bus/resources/1.mov"
+            className={styles.player}
+          ></video>
+        </div>
       </div>
-      <div
-        className={`${styles.button} ${styles.countButton}`}
-        onClick={decrementCount}
-      >
-        <span className="material-icons-round">remove</span>
-      </div>
-      <div
-        className={`${styles.button} ${styles.countButton}`}
-        onClick={incrementCount}
-      >
-        <span className="material-icons-round">add</span>
+      <div className={styles.col}>
+        <div className={`${styles.button} ${styles.controlsButton}`}>
+          <span className="material-icons-round">play_arrow</span>
+        </div>
+        <div
+          className={`${styles.button} ${styles.countButton}`}
+          onClick={incrementCount}
+        >
+          <span className="material-icons-round">add</span>
+        </div>
       </div>
     </div>
   );
