@@ -1,8 +1,12 @@
-import { createHashRouter, RouterProvider } from "react-router-dom";
+import {
+  createBrowserRouter,
+  createHashRouter,
+  RouterProvider,
+} from "react-router-dom";
 import "./App.css";
 import MainMenu from "./components/MainMenu";
 import PlayScene from "./components/PlayScene";
-const router = createHashRouter([
+const router = createBrowserRouter([
   {
     path: "/",
     element: <MainMenu />,
