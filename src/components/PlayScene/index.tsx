@@ -6,7 +6,13 @@ import video from "../../resources/1.mov";
 const PlayScene = () => {
   const [count, setCount] = React.useState(9);
   const [videoIsPlaying, setVideoIsPlaying] = React.useState(false);
+  const [speed, setSpeed] = React.useState(2);
   const videoRef = React.useRef<HTMLVideoElement>(null);
+
+  React.useEffect(() => {
+    videoRef.current!.playbackRate = speed;
+    console.log(videoRef.current!.playbackRate);
+  }, [speed]);
 
   const toggleVideo = () => {
     if (videoIsPlaying) {
@@ -15,6 +21,13 @@ const PlayScene = () => {
       videoRef.current?.play();
     }
     setVideoIsPlaying(!videoIsPlaying);
+  };
+  const toggleVideoSpeed = () => {
+    if (speed === 3) {
+      setSpeed(1);
+    } else {
+      setSpeed(speed + 1);
+    }
   };
   const incrementCount = () => {
     setCount(count + 1);
@@ -45,13 +58,24 @@ const PlayScene = () => {
         </div>
       </div>
       <div className={styles.col}>
-        <div
-          className={`${styles.button} ${styles.controlsButton}`}
-          onClick={toggleVideo}
-        >
-          <span className="material-icons-round">
-            {videoIsPlaying ? "pause" : "play_arrow"}
-          </span>
+        <div>
+          <div
+            className={`${styles.button} ${styles.controlsButton}`}
+            onClick={toggleVideo}
+          >
+            <span className="material-icons-round">
+              {videoIsPlaying ? "pause" : "play_arrow"}
+            </span>
+          </div>
+          <div
+            className={`${styles.button} ${styles.controlsButton}`}
+            style={{ marginTop: 10 }}
+            onClick={toggleVideoSpeed}
+          >
+            <span style={{ fontSize: "2em", lineHeight: "calc(1em*1.5)" }}>
+              {`${speed}x`}
+            </span>
+          </div>
         </div>
         <div
           className={`${styles.button} ${styles.countButton}`}
