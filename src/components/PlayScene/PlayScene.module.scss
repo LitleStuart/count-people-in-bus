@@ -39,6 +39,7 @@
 
   .controlsButton {
     background: #ccc8ff;
+    margin-bottom: 10px;
   }
 
   .countButton {
@@ -74,4 +75,13 @@ h2 {
   margin: 0;
   background-color: rgba(0, 0, 0, 0.3);
   color: white;
+}
+
+.link {
+  background-color: #ccc8ff;
+  cursor: pointer;
+  border-radius: 1em;
+  padding: 10px 0;
+  margin: 0 0 7px;
+  width: 100%;
 }
