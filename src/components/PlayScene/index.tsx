@@ -88,6 +88,7 @@ const PlayScene = () => {
             onEnded={() => {
               setVideoIsPlaying(false);
             }}
+            playsInline
           ></video>
         </div>
       </div>
