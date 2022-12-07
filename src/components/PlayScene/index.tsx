@@ -2,6 +2,8 @@ import React from "react";
 import { Link } from "react-router-dom";
 import styles from "./PlayScene.module.scss";
 import video from "../../resources/1.mov";
+import { Player } from "./Player";
+import { MaterialButton } from "./MaterialButton";
 
 const PlayScene = () => {
   const videoRef = React.useRef<HTMLVideoElement>(null);
@@ -28,11 +30,7 @@ const PlayScene = () => {
   }, [withMovement, videoIsPlaying]);
 
   const toggleVideoSpeed = () => {
-    if (speed === 3) {
-      setSpeed(1);
-    } else {
-      setSpeed(speed + 1);
-    }
+    setSpeed((speed % 2) + 1);
   };
   const incrementCount = () => {
     setCount(count + 1);
@@ -72,65 +70,53 @@ const PlayScene = () => {
             })}
           </div>
         </div>
-        <div
+        <MaterialButton
           className={`${styles.button} ${styles.countButton}`}
-          onClick={decrementCount}
-        >
-          <span className="material-icons-round">remove</span>
-        </div>
+          handleClick={() => {
+            decrementCount();
+          }}
+          text="remove"
+        />
       </div>
-      <div className={styles.col}>
-        <div className={styles.videoMask}>
-          <video
-            ref={videoRef}
-            src={video}
-            className={styles.player}
-            onEnded={() => {
-              setVideoIsPlaying(false);
-            }}
-            playsInline
-          ></video>
-        </div>
-      </div>
+      <Player
+        videoRef={videoRef}
+        source={video}
+        handleVideoEnd={() => {
+          setVideoIsPlaying(false);
+        }}
+      />
       <div className={styles.col}>
         <div>
-          <div
-            className={`${styles.button} ${styles.controlsButton}`}
-            onClick={() => {
-              setVideoIsPlaying(!videoIsPlaying);
-            }}
-          >
-            <span className="material-icons-round">
-              {videoIsPlaying ? "pause" : "play_arrow"}
-            </span>
-          </div>
-          <div
+          <MaterialButton
+            handleClick={() => setVideoIsPlaying(!videoIsPlaying)}
+            text={videoIsPlaying ? "pause" : "play_arrow"}
             className={`${styles.button} ${styles.controlsButton}`}
             style={{ marginTop: 10 }}
-            onClick={toggleVideoSpeed}
-          >
-            <span style={{ fontSize: "2em", lineHeight: "calc(1em*1.5)" }}>
-              {`${speed}x`}
-            </span>
-          </div>
-          <div
+          />
+          <MaterialButton
+            className={`${styles.button} ${styles.controlsButton}`}
+            handleClick={() => toggleVideoSpeed()}
+            text={speed === 1 ? "chevron_right" : "keyboard_double_arrow_right"}
+            style={{ marginTop: 10 }}
+          />
+          <MaterialButton
             className={`${styles.button} ${styles.controlsButton}`}
             style={{ marginTop: 10 }}
-            onClick={() => {
+            text={
+              withMovement ? "directions_run" : "airline_seat_recline_normal"
+            }
+            handleClick={() => {
               setWithMovement(!withMovement);
             }}
-          >
-            <span className="material-icons-round">
-              {withMovement ? "directions_run" : "airline_seat_recline_normal"}
-            </span>
-          </div>
+          />
         </div>
-        <div
+        <MaterialButton
           className={`${styles.button} ${styles.countButton}`}
-          onClick={incrementCount}
-        >
-          <span className="material-icons-round">add</span>
-        </div>
+          handleClick={() => {
+            incrementCount();
+          }}
+          text="add"
+        />
       </div>
     </div>
   );
