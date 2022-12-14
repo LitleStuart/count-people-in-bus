@@ -2,8 +2,9 @@ import React from "react";
 
 interface IMaterialButtonProps {
   handleClick: () => void;
-  text: string;
-  className: string;
+  icon?: string;
+  text?: string;
+  className?: string;
   style?: React.CSSProperties;
 }
 
@@ -12,10 +13,11 @@ export const MaterialButton = ({
   text,
   className,
   style,
+  icon,
 }: IMaterialButtonProps) => {
   return (
     <div className={className} onClick={handleClick} style={style}>
-      <span className="material-icons-round">{text}</span>
+      <span className={icon ? "material-icons-round" : ""}>{text || icon}</span>
     </div>
   );
 };

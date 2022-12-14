@@ -55,17 +55,18 @@ const PlayScene = () => {
           <div style={{ textAlign: "center" }}>
             {linksToVideoTime.map((val) => {
               return (
-                <p
+                <MaterialButton
                   key={val}
                   className={styles.link}
-                  onClick={() => {
+                  handleClick={() => {
                     setCurrentVideoTime(val);
                   }}
-                >{`${Math.floor(val / 60)
-                  .toString()
-                  .padStart(2, "0")}:${(val % 60)
-                  .toString()
-                  .padStart(2, "0")}`}</p>
+                  text={`${Math.floor(val / 60)
+                    .toString()
+                    .padStart(2, "0")}:${(val % 60)
+                    .toString()
+                    .padStart(2, "0")}`}
+                />
               );
             })}
           </div>
@@ -75,7 +76,7 @@ const PlayScene = () => {
           handleClick={() => {
             decrementCount();
           }}
-          text="remove"
+          icon="remove"
         />
       </div>
       <Player
@@ -89,17 +90,17 @@ const PlayScene = () => {
         <div>
           <MaterialButton
             handleClick={() => setVideoIsPlaying(!videoIsPlaying)}
-            text={videoIsPlaying ? "pause" : "play_arrow"}
+            icon={videoIsPlaying ? "pause" : "play_arrow"}
             className={`${styles.button} ${styles.controlsButton}`}
           />
           <MaterialButton
             className={`${styles.button} ${styles.controlsButton}`}
             handleClick={() => toggleVideoSpeed()}
-            text={speed === 1 ? "chevron_right" : "keyboard_double_arrow_right"}
+            icon={speed === 1 ? "chevron_right" : "keyboard_double_arrow_right"}
           />
           <MaterialButton
             className={`${styles.button} ${styles.controlsButton}`}
-            text={
+            icon={
               withMovement ? "directions_run" : "airline_seat_recline_normal"
             }
             handleClick={() => {
@@ -112,7 +113,7 @@ const PlayScene = () => {
           handleClick={() => {
             incrementCount();
           }}
-          text="add"
+          icon="add"
         />
       </div>
     </div>
