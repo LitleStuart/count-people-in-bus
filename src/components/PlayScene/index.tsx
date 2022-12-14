@@ -91,17 +91,14 @@ const PlayScene = () => {
             handleClick={() => setVideoIsPlaying(!videoIsPlaying)}
             text={videoIsPlaying ? "pause" : "play_arrow"}
             className={`${styles.button} ${styles.controlsButton}`}
-            style={{ marginTop: 10 }}
           />
           <MaterialButton
             className={`${styles.button} ${styles.controlsButton}`}
             handleClick={() => toggleVideoSpeed()}
             text={speed === 1 ? "chevron_right" : "keyboard_double_arrow_right"}
-            style={{ marginTop: 10 }}
           />
           <MaterialButton
             className={`${styles.button} ${styles.controlsButton}`}
-            style={{ marginTop: 10 }}
             text={
               withMovement ? "directions_run" : "airline_seat_recline_normal"
             }
