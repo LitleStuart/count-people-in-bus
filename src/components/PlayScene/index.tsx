@@ -3,14 +3,19 @@ import { Link } from "react-router-dom";
 import styles from "./PlayScene.module.scss";
 import video from "../../resources/1.mov";
 import { Player } from "./Player";
-import { MaterialButton } from "./MaterialButton";
+import { MaterialButton } from "../MaterialButton";
 
 const PlayScene = () => {
   const videoRef = React.useRef<HTMLVideoElement>(null);
-  const [count, setCount] = React.useState(9);
+  const [insidePeople, setInsidePeople] = React.useState(9);
+  const [outsidePeople, setOutsidePeople] = React.useState(0);
   const [videoIsPlaying, setVideoIsPlaying] = React.useState(false);
   const [speed, setSpeed] = React.useState(2);
   const [intervals, setIntervals] = React.useState<number[]>([]);
+
+  // const sendData = (data: any) => {
+  //   console.log(data);
+  // };
 
   React.useEffect(() => {
     videoRef.current!.playbackRate = speed;
@@ -22,7 +27,7 @@ const PlayScene = () => {
     setIntervals([...intervals, SECONDS_FROM_START_VIDEO]);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [count]);
+  }, [insidePeople, outsidePeople]);
 
   React.useEffect(() => {
     if (videoIsPlaying) {
@@ -36,17 +41,15 @@ const PlayScene = () => {
     setSpeed((speed % 2) + 1);
   };
   const incrementCount = () => {
-    setCount(count + 1);
+    setInsidePeople(insidePeople + 1);
   };
   const decrementCount = () => {
-    if (count > 0) {
-      setCount(count - 1);
-    }
+    setOutsidePeople(outsidePeople + 1);
   };
 
   return (
     <div className={styles.container}>
-      <h2>People: {count}</h2>
+      <h2>People: {insidePeople - outsidePeople}</h2>
       <div className={styles.col}>
         <div>
           <Link to="/" className={`${styles.button} ${styles.controlsButton}`}>
