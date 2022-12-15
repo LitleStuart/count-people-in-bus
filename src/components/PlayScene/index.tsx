@@ -10,16 +10,19 @@ const PlayScene = () => {
   const [count, setCount] = React.useState(9);
   const [videoIsPlaying, setVideoIsPlaying] = React.useState(false);
   const [speed, setSpeed] = React.useState(2);
-  const [withMovement, setWithMovement] = React.useState(true);
-  const [linksToVideoTime, setlinksToVideoTime] = React.useState<number[]>([]);
+  const [intervals, setIntervals] = React.useState<number[]>([]);
 
   React.useEffect(() => {
     videoRef.current!.playbackRate = speed;
   }, [speed]);
 
   React.useEffect(() => {
-    setlinksToVideoTime([1, 5, 9, 15]);
-  }, []);
+    const SECONDS_FROM_START_VIDEO =
+      Math.round(videoRef.current!.currentTime * 1000) / 1000;
+    setIntervals([...intervals, SECONDS_FROM_START_VIDEO]);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [count]);
 
   React.useEffect(() => {
     if (videoIsPlaying) {
@@ -27,7 +30,7 @@ const PlayScene = () => {
     } else {
       videoRef.current?.pause();
     }
-  }, [withMovement, videoIsPlaying]);
+  }, [videoIsPlaying]);
 
   const toggleVideoSpeed = () => {
     setSpeed((speed % 2) + 1);
@@ -40,9 +43,6 @@ const PlayScene = () => {
       setCount(count - 1);
     }
   };
-  const setCurrentVideoTime = (secs: number) => {
-    videoRef.current!.currentTime = secs;
-  };
 
   return (
     <div className={styles.container}>
@@ -52,24 +52,6 @@ const PlayScene = () => {
           <Link to="/" className={`${styles.button} ${styles.controlsButton}`}>
             <span className="material-icons-round">close</span>
           </Link>
-          <div style={{ textAlign: "center" }}>
-            {linksToVideoTime.map((val) => {
-              return (
-                <MaterialButton
-                  key={val}
-                  className={styles.link}
-                  handleClick={() => {
-                    setCurrentVideoTime(val);
-                  }}
-                  text={`${Math.floor(val / 60)
-                    .toString()
-                    .padStart(2, "0")}:${(val % 60)
-                    .toString()
-                    .padStart(2, "0")}`}
-                />
-              );
-            })}
-          </div>
         </div>
         <MaterialButton
           className={`${styles.button} ${styles.countButton}`}
@@ -97,15 +79,6 @@ const PlayScene = () => {
             className={`${styles.button} ${styles.controlsButton}`}
             handleClick={() => toggleVideoSpeed()}
             icon={speed === 1 ? "chevron_right" : "keyboard_double_arrow_right"}
-          />
-          <MaterialButton
-            className={`${styles.button} ${styles.controlsButton}`}
-            icon={
-              withMovement ? "directions_run" : "airline_seat_recline_normal"
-            }
-            handleClick={() => {
-              setWithMovement(!withMovement);
-            }}
           />
         </div>
         <MaterialButton
