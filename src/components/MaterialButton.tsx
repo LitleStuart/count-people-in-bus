@@ -1,7 +1,7 @@
 import React from "react";
 
 interface IMaterialButtonProps {
-  handleClick: () => void;
+  handleClick?: () => void;
   icon?: string;
   text?: string;
   className?: string;
@@ -17,7 +17,7 @@ export const MaterialButton = ({
 }: IMaterialButtonProps) => {
   return (
     <div className={className} onClick={handleClick} style={style}>
-      <span className={icon ? "material-icons-round" : ""}>{text || icon}</span>
+      <span className={icon ? "material-icons-round" : ""}>{icon || text}</span>
     </div>
   );
 };
