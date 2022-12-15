@@ -4,8 +4,8 @@
   "display": "fullscreen",
   "scope": "/",
   "start_url": "/",
-  "name": "llama",
-  "short_name": "la",
+  "name": "Подсчет людей в маршрутке",
+  "short_name": "ВМаршрутке",
   "icons": [
     {
       "src": "/icon-192x192.png",
