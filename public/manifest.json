@@ -1,11 +1,11 @@
 {
   "theme_color": "#ccc8ff",
   "background_color": "#ffffff",
-  "display": "fullscreen",
+  "display": "standalone",
   "scope": "/",
   "start_url": "/",
-  "name": "Подсчет людей в маршрутке",
-  "short_name": "ВМаршрутке",
+  "name": "Count people in a bus",
+  "short_name": "Count people",
   "icons": [
     {
       "src": "/icon-192x192.png",
