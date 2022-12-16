@@ -3,7 +3,7 @@
   "short_name": "Count people",
   "theme_color": "#ccc8ff",
   "background_color": "#ffffff",
-  "display": "standalone",
+  "display": "fullscreen",
   "orientation": "landscape",
   "start_url": ".",
   "icons": [
