@@ -1,9 +1,16 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import styles from "./PlayScene.module.scss";
-import video from "../../resources/1.mov";
 import { Player } from "./Player";
 import { MaterialButton } from "../MaterialButton";
+
+const sendData = (data: any) => {
+  console.log(data);
+};
+
+const getVideo = () => {
+  return "/static/media/1.e5414945a9c32279a43d.mov";
+};
 
 const PlayScene = () => {
   const videoRef = React.useRef<HTMLVideoElement>(null);
@@ -12,10 +19,6 @@ const PlayScene = () => {
   const [videoIsPlaying, setVideoIsPlaying] = React.useState(false);
   const [speed, setSpeed] = React.useState(2);
   const [intervals, setIntervals] = React.useState<number[]>([]);
-
-  // const sendData = (data: any) => {
-  //   console.log(data);
-  // };
 
   React.useEffect(() => {
     videoRef.current!.playbackRate = speed;
@@ -66,7 +69,7 @@ const PlayScene = () => {
       </div>
       <Player
         videoRef={videoRef}
-        source={video}
+        source={getVideo()}
         handleVideoEnd={() => {
           setVideoIsPlaying(false);
         }}
@@ -92,6 +95,8 @@ const PlayScene = () => {
           icon="add"
         />
       </div>
+      <MaterialButton icon="refresh" style={{ display: "none" }} />
+      <MaterialButton icon="done" style={{ display: "none" }} />
     </div>
   );
 };
