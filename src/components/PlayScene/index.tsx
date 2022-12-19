@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import video from "../../resources/1.mov";
 import styles from "./PlayScene.module.scss";
 import { Player } from "./Player";
 import { MaterialButton } from "../MaterialButton";
@@ -9,7 +10,7 @@ const sendData = (data: any) => {
 };
 
 const getVideo = () => {
-  return "/static/media/1.e5414945a9c32279a43d.mov";
+  return video;
 };
 
 const PlayScene = () => {
