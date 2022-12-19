@@ -5,8 +5,8 @@ import styles from "./PlayScene.module.scss";
 import { Player } from "./Player";
 import { MaterialButton } from "../MaterialButton";
 
-const sendData = (data: any) => {
-  console.log(data);
+const sendData = (insidePeople: number, outsidePeople: number) => {
+  window.confirm(`Вошло ${insidePeople}, вышло ${outsidePeople}. Подтвердить?`);
 };
 
 const getVideo = () => {
@@ -59,6 +59,13 @@ const PlayScene = () => {
           <Link to="/" className={`${styles.button} ${styles.controlsButton}`}>
             <span className="material-icons-round">close</span>
           </Link>
+          <MaterialButton
+            className={`${styles.button} ${styles.controlsButton}`}
+            icon="done"
+            handleClick={() => {
+              sendData(insidePeople, outsidePeople);
+            }}
+          />
         </div>
         <MaterialButton
           className={`${styles.button} ${styles.countButton}`}
