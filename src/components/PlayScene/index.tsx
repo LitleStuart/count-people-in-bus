@@ -5,9 +5,11 @@ import styles from "./PlayScene.module.scss";
 import { Player } from "./Player";
 import { MaterialButton } from "../MaterialButton";
 
-const sendData = (insidePeople: number, outsidePeople: number) => {
-  window.confirm(`Вошло ${insidePeople}, вышло ${outsidePeople}. Подтвердить?`);
-};
+const sendData = (
+  insidePeople: number,
+  outsidePeople: number,
+  intervals: number[]
+) => {};
 
 const getVideo = () => {
   return video;
@@ -51,6 +53,21 @@ const PlayScene = () => {
     setOutsidePeople(outsidePeople + 1);
   };
 
+  const confirmData = () => {
+    const confirmMessage = `Вошло ${insidePeople}, вышло ${outsidePeople}. Подтвердить?`;
+    const data = {
+      insidePeople: insidePeople,
+      outsidePeople: outsidePeople,
+      intervals: intervals,
+    };
+    if (window.confirm(confirmMessage)) {
+      sendData(data.insidePeople, data.outsidePeople, data.intervals);
+      setInsidePeople(0);
+      setOutsidePeople(0);
+      setIntervals([]);
+    }
+  };
+
   return (
     <div className={styles.container}>
       <h2>People: {insidePeople - outsidePeople}</h2>
@@ -62,9 +79,7 @@ const PlayScene = () => {
           <MaterialButton
             className={`${styles.button} ${styles.controlsButton}`}
             icon="done"
-            handleClick={() => {
-              sendData(insidePeople, outsidePeople);
-            }}
+            handleClick={confirmData}
           />
         </div>
         <MaterialButton
@@ -103,8 +118,6 @@ const PlayScene = () => {
           icon="add"
         />
       </div>
-      <MaterialButton icon="refresh" style={{ display: "none" }} />
-      <MaterialButton icon="done" style={{ display: "none" }} />
     </div>
   );
 };
