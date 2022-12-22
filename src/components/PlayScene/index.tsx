@@ -4,12 +4,15 @@ import video from "../../resources/1.mov";
 import styles from "./PlayScene.module.scss";
 import { Player } from "./Player";
 import { MaterialButton } from "../MaterialButton";
+import Swal from "sweetalert2";
 
 const sendData = (
   insidePeople: number,
   outsidePeople: number,
   intervals: number[]
-) => {};
+) => {
+  Swal.fire("Данные успешно отправлены", "", "success");
+};
 
 const getVideo = () => {
   return video;
@@ -54,18 +57,34 @@ const PlayScene = () => {
   };
 
   const confirmData = () => {
-    const confirmMessage = `Вошло ${insidePeople}, вышло ${outsidePeople}. Подтвердить?`;
+    const confirmMessage = `Вошло ${insidePeople}, вышло ${outsidePeople}`;
     const data = {
       insidePeople: insidePeople,
       outsidePeople: outsidePeople,
       intervals: intervals,
     };
-    if (window.confirm(confirmMessage)) {
-      sendData(data.insidePeople, data.outsidePeople, data.intervals);
-      setInsidePeople(0);
-      setOutsidePeople(0);
-      setIntervals([]);
-    }
+    Swal.fire({
+      title: "Подтверждение",
+      text: confirmMessage,
+      showConfirmButton: true,
+      confirmButtonText: "Да",
+      showCancelButton: true,
+      cancelButtonText: "Нет",
+      confirmButtonColor: "#9086ff",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        sendData(data.insidePeople, data.outsidePeople, data.intervals);
+        setInsidePeople(0);
+        setOutsidePeople(0);
+        setIntervals([]);
+      }
+    });
+    // if (window.confirm(confirmMessage)) {
+    //   sendData(data.insidePeople, data.outsidePeople, data.intervals);
+    //   setInsidePeople(0);
+    //   setOutsidePeople(0);
+    //   setIntervals([]);
+    // }
   };
 
   return (
