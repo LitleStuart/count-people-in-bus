@@ -15,6 +15,7 @@ const MainMenu = () => {
       </div>
     );
   }
+
   return (
     <div className={styles.container}>
       <h1 className={styles.title}>Сколько людей в автобусе?</h1>
