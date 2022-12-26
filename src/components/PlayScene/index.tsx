@@ -79,12 +79,6 @@ const PlayScene = () => {
         setIntervals([]);
       }
     });
-    // if (window.confirm(confirmMessage)) {
-    //   sendData(data.insidePeople, data.outsidePeople, data.intervals);
-    //   setInsidePeople(0);
-    //   setOutsidePeople(0);
-    //   setIntervals([]);
-    // }
   };
 
   return (
