@@ -1,6 +1,5 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import video from "../../resources/1.mov";
 import styles from "./PlayScene.module.scss";
 import { Player } from "./Player";
 import { MaterialButton } from "../MaterialButton";
@@ -15,12 +14,12 @@ const sendData = (
 };
 
 const getVideo = () => {
-  return video;
+  return "https://vpp-reg.tahoplan.ru/video/2022-12-29T13/001241dbf441_2022-12-29T13:29:27_007.mp4";
 };
 
 const PlayScene = () => {
   const videoRef = React.useRef<HTMLVideoElement>(null);
-  const [insidePeople, setInsidePeople] = React.useState(9);
+  const [insidePeople, setInsidePeople] = React.useState(0);
   const [outsidePeople, setOutsidePeople] = React.useState(0);
   const [videoIsPlaying, setVideoIsPlaying] = React.useState(false);
   const [speed, setSpeed] = React.useState(2);
@@ -57,7 +56,7 @@ const PlayScene = () => {
   };
 
   const confirmData = () => {
-    const confirmMessage = `Вошло ${insidePeople}, вышло ${outsidePeople}`;
+    const confirmMessage = `Зашли ${insidePeople}, вышли ${outsidePeople}`;
     const data = {
       insidePeople: insidePeople,
       outsidePeople: outsidePeople,
@@ -83,7 +82,9 @@ const PlayScene = () => {
 
   return (
     <div className={styles.container}>
-      <h2>People: {insidePeople - outsidePeople}</h2>
+      <h2>
+        Зашли: {insidePeople}; вышли: {outsidePeople}
+      </h2>
       <div className={styles.col}>
         <div>
           <Link to="/" className={`${styles.button} ${styles.controlsButton}`}>
