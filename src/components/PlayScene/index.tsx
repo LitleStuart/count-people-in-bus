@@ -6,16 +6,20 @@ import Swal from "sweetalert2";
 
 const sendData = (insidePeople: number, outsidePeople: number) => {
   // @ts-ignore
-  apex.server
-    .process("send_data", {
+  apex.server.process(
+    "send_data",
+    {
       // @ts-ignore
       x01: apex.item("P154_ID_VIDEO").getValue(),
       x02: insidePeople,
       x03: outsidePeople,
-    })
-    .then(() => {
-      Swal.fire("Данные успешно отправлены", "", "success");
-    });
+    },
+    {
+      success: () => {
+        Swal.fire("Данные успешно отправлены", "", "success");
+      },
+    }
+  );
 };
 
 const getVideoUrl = (): string => {
@@ -41,15 +45,12 @@ const PlayScene = () => {
 
   React.useEffect(() => {
     videoRef.current!.playbackRate = speed;
-  }, [speed]);
-
-  React.useEffect(() => {
     if (videoIsPlaying) {
       videoRef.current?.play();
     } else {
       videoRef.current?.pause();
     }
-  }, [videoIsPlaying]);
+  }, [videoIsPlaying, speed]);
 
   const toggleVideoSpeed = () => {
     setSpeed((speed % 2) + 1);
@@ -64,21 +65,28 @@ const PlayScene = () => {
   const updateData = (): void => {
     setInsidePeople(0);
     setOutsidePeople(0);
+    setVideoIsPlaying(false);
     // @ts-ignore
-    apex.server
-      .process("get_new_video", {
+    apex.server.process(
+      "get_new_video",
+      {
         // @ts-ignore
         x01: apex.item("P154_BEG_DT").getValue(),
         // @ts-ignore
         x02: apex.item("P154_END_DT").getValue(),
         // @ts-ignore
         x03: apex.item("P154_VEH").getValue(),
-      })
-      .then((data: { id: number; url: string }) => {
-        // @ts-ignore
-        apex.item("P154_ID_VIDEO").setValue(data.id);
-        setVideoUrl(data.url);
-      });
+      },
+      {
+        success: (data: { id: number; url: string }) => {
+          // @ts-ignore
+          apex.item("P154_ID_VIDEO").setValue(data.id);
+          // @ts-ignore
+          apex.item("P154_VIDEO").setValue(data.url);
+          setVideoUrl(data.url);
+        },
+      }
+    );
   };
 
   const confirmData = () => {
