@@ -2,18 +2,10 @@ import React from "react";
 import styles from "./PlayScene.module.scss";
 
 interface IPlayerProps {
-  // playDynamicOnly: boolean;
   source: string;
   videoRef: React.RefObject<HTMLVideoElement>;
   handleVideoEnd: () => void;
-  // speed: number;
 }
-
-// type Interval = {
-//   startTime: number;
-//   endTime?: number;
-//   type: "static" | "dynamic";
-// };
 
 export const Player = ({ source, videoRef, handleVideoEnd }: IPlayerProps) => {
   return (
