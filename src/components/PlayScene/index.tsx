@@ -4,27 +4,14 @@ import { Player } from "./Player";
 import { MaterialButton } from "../MaterialButton";
 import Swal from "sweetalert2";
 
-const sendData = (insidePeople: number, outsidePeople: number) => {
-  // @ts-ignore
-  apex.server.process(
-    "send_data",
-    {
-      // @ts-ignore
-      x01: apex.item("P154_ID_VIDEO").getValue(),
-      x02: insidePeople,
-      x03: outsidePeople,
-    },
-    {
-      success: () => {
-        Swal.fire("Данные успешно отправлены", "", "success");
-      },
-    }
-  );
-};
-
 const getVideoUrl = (): string => {
   // @ts-ignore
   return apex.item("P154_VIDEO").getValue();
+};
+
+const getVideoDate = (): string => {
+  // @ts-ignore
+  return apex.item("P154_DATE").getValue();
 };
 
 const getSpeedIcon = (speed: number) => {
@@ -42,6 +29,7 @@ const PlayScene = () => {
   const [outsidePeople, setOutsidePeople] = React.useState(0);
   const [videoIsPlaying, setVideoIsPlaying] = React.useState(false);
   const [speed, setSpeed] = React.useState(2);
+  const [videoDate, setVideoDate] = React.useState(getVideoDate());
 
   React.useEffect(() => {
     videoRef.current!.playbackRate = speed;
@@ -61,36 +49,46 @@ const PlayScene = () => {
   const decrementCount = () => {
     setOutsidePeople(outsidePeople + 1);
   };
-
-  const updateData = (): void => {
+  const handleVideoEnd = () => {
+    setVideoIsPlaying(false);
+  };
+  const resetPeopleCount = () => {
     setInsidePeople(0);
     setOutsidePeople(0);
-    setVideoIsPlaying(false);
+  };
+
+  const updateData = (): void => {
     // @ts-ignore
-    apex.server.process(
-      "get_new_video",
-      {
+    apex.server
+      .process("send_data", {
         // @ts-ignore
-        x01: apex.item("P154_BEG_DT").getValue(),
+        x01: apex.item("P154_VEH").getValue(),
         // @ts-ignore
-        x02: apex.item("P154_END_DT").getValue(),
+        x02: apex.item("P154_BEG_DT").getValue(),
         // @ts-ignore
-        x03: apex.item("P154_VEH").getValue(),
-      },
-      {
-        success: (data: { id: number; url: string }) => {
-          // @ts-ignore
-          apex.item("P154_ID_VIDEO").setValue(data.id);
-          // @ts-ignore
-          apex.item("P154_VIDEO").setValue(data.url);
-          setVideoUrl(data.url);
-        },
-      }
-    );
+        x03: apex.item("P154_END_DT").getValue(),
+        x04: insidePeople,
+        x05: outsidePeople,
+        // @ts-ignore
+        x06: apex.item("P154_ID_VIDEO").getValue(),
+      })
+      .then((result: { id: number; url: string; date: string }) => {
+        setInsidePeople(0);
+        setOutsidePeople(0);
+        setVideoIsPlaying(false);
+        // @ts-ignore
+        apex.item("P154_ID_VIDEO").setValue(result.id);
+        // @ts-ignore
+        apex.item("P154_VIDEO").setValue(result.url);
+        // @ts-ignore
+        apex.item("P154_DATE").setValue(result.date);
+        setVideoDate(result.date);
+        setVideoUrl(result.url);
+      });
   };
 
   const confirmData = () => {
-    const confirmMessage = `Зашли ${insidePeople}, вышли ${outsidePeople}`;
+    const confirmMessage = `Зашло ${insidePeople}, вышло ${outsidePeople}`;
     Swal.fire({
       title: "Подтверждение",
       text: confirmMessage,
@@ -101,25 +99,7 @@ const PlayScene = () => {
       confirmButtonColor: "#9086ff",
     }).then((result) => {
       if (result.isConfirmed) {
-        sendData(insidePeople, outsidePeople);
         updateData();
-      }
-    });
-  };
-
-  const handleVideoEnd = () => {
-    setVideoIsPlaying(false);
-    Swal.fire({
-      title: "Подтверждение",
-      text: "Видео закончилось, хотите сразу отправить данные?",
-      showConfirmButton: true,
-      confirmButtonText: "Да",
-      confirmButtonColor: "#9086ff",
-      showCancelButton: true,
-      cancelButtonText: "Отмена",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        confirmData();
       }
     });
   };
@@ -127,7 +107,9 @@ const PlayScene = () => {
   return (
     <div className={styles.container}>
       <h2>
-        Зашли: {insidePeople}; вышли: {outsidePeople}
+        Видео от {videoDate}
+        <br />
+        Вышло: {outsidePeople}; зашло: {insidePeople}
       </h2>
       <div className={styles.col}>
         <div>
@@ -135,6 +117,18 @@ const PlayScene = () => {
             className={`${styles.button} ${styles.controlsButton}`}
             icon="done"
             handleClick={confirmData}
+          />
+          <MaterialButton
+            className={`${styles.button} ${styles.controlsButton}`}
+            icon="refresh"
+            handleClick={resetPeopleCount}
+          />
+          <MaterialButton
+            className={`${styles.button} ${styles.controlsButton}`}
+            icon="arrow_back"
+            handleClick={() => {
+              window.location.href = "https://rnis66.ru/ords/f?p=202:155";
+            }}
           />
         </div>
         <MaterialButton
