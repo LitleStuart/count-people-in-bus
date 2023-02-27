@@ -88,7 +88,7 @@ const PlayScene = () => {
   };
 
   const confirmData = () => {
-    const confirmMessage = `Зашло ${insidePeople}, вышло ${outsidePeople}`;
+    const confirmMessage = `Вышло ${outsidePeople}, зашло ${insidePeople}`;
     Swal.fire({
       title: "Подтверждение",
       text: confirmMessage,
@@ -127,7 +127,10 @@ const PlayScene = () => {
             className={`${styles.button} ${styles.controlsButton}`}
             icon="arrow_back"
             handleClick={() => {
-              window.location.href = "https://rnis66.ru/ords/f?p=202:155";
+              // @ts-ignore
+              window.location.href = apex.util.makeApplicationUrl({
+                pageId: 155,
+              });
             }}
           />
         </div>
