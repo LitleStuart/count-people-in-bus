@@ -32,6 +32,13 @@ const PlayScene = () => {
   const [videoDate, setVideoDate] = React.useState(getVideoDate());
 
   React.useEffect(() => {
+    const onBeforeInstallPrompt = (event: Event) => {
+      console.log(event);
+    };
+    window.addEventListener("beforeinstallprompt", onBeforeInstallPrompt);
+  }, []);
+
+  React.useEffect(() => {
     videoRef.current!.playbackRate = speed;
     if (videoIsPlaying) {
       videoRef.current?.play();
