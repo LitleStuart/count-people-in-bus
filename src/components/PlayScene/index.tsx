@@ -32,10 +32,24 @@ const PlayScene = () => {
   const [videoDate, setVideoDate] = React.useState(getVideoDate());
 
   React.useEffect(() => {
-    const onBeforeInstallPrompt = (event: Event) => {
-      console.log(event);
+    const isIos = () => {
+      const userAgent = window.navigator.userAgent.toLowerCase();
+      return /iphone|ipad|ipod/.test(userAgent);
     };
-    window.addEventListener("beforeinstallprompt", onBeforeInstallPrompt);
+    const isInStandaloneMode = () =>
+      // @ts-ignore
+      "standalone" in window.navigator && window.navigator.standalone;
+
+    if (isIos() && !isInStandaloneMode()) {
+      Swal.fire({
+        title: "Установите приложение",
+        text: 'Нажмите на кнопку поделиться, а затем на кнопку "Добавить на главный экран" ("Add to homescreen")',
+        showConfirmButton: true,
+        confirmButtonText: "Хорошо",
+        showCancelButton: false,
+        confirmButtonColor: "#9086ff",
+      });
+    }
   }, []);
 
   React.useEffect(() => {
