@@ -29,6 +29,10 @@ const PlayScene = () => {
   const [outsidePeople, setOutsidePeople] = React.useState(0);
   const [videoIsPlaying, setVideoIsPlaying] = React.useState(false);
   const [speed, setSpeed] = React.useState(2);
+  const [videoTime, setVideoTime] = React.useState({
+    currentTime: 0,
+    duration: 0,
+  });
   const [videoDate, setVideoDate] = React.useState(getVideoDate());
 
   React.useEffect(() => {
@@ -128,7 +132,8 @@ const PlayScene = () => {
   return (
     <div className={styles.container}>
       <h2>
-        Видео от {videoDate}
+        Видео от {videoDate}, {Math.floor(videoTime.currentTime)}/
+        {Math.floor(videoTime.duration)} сек
         <br />
         Вышло: {outsidePeople}; зашло: {insidePeople}
       </h2>
@@ -165,6 +170,18 @@ const PlayScene = () => {
         videoRef={videoRef}
         source={videoUrl}
         handleVideoEnd={handleVideoEnd}
+        handleTimeUpdate={() => {
+          setVideoTime({
+            duration: videoTime.duration,
+            currentTime: videoRef.current!.currentTime,
+          });
+        }}
+        handleLoadedData={() => {
+          setVideoTime({
+            currentTime: 0,
+            duration: videoRef.current!.duration,
+          });
+        }}
       />
       <div className={styles.col}>
         <div>
