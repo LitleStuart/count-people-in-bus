@@ -176,7 +176,7 @@ const PlayScene = () => {
             currentTime: videoRef.current!.currentTime,
           });
         }}
-        handleLoadedData={() => {
+        handleLoadedMetadata={() => {
           setVideoTime({
             currentTime: 0,
             duration: videoRef.current!.duration,

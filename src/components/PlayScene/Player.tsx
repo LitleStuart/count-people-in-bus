@@ -6,7 +6,7 @@ interface IPlayerProps {
   videoRef: React.RefObject<HTMLVideoElement>;
   handleVideoEnd: () => void;
   handleTimeUpdate: () => void;
-  handleLoadedData: () => void;
+  handleLoadedMetadata: () => void;
 }
 
 export const Player = ({
@@ -14,20 +14,19 @@ export const Player = ({
   videoRef,
   handleVideoEnd,
   handleTimeUpdate,
-  handleLoadedData,
+  handleLoadedMetadata,
 }: IPlayerProps) => {
   return (
     <div className={styles.col}>
       <div className={styles.videoMask}>
         <video
-          preload="auto"
+          playsInline
           src={source}
           ref={videoRef}
           className={styles.player}
           onTimeUpdate={handleTimeUpdate}
+          onLoadedMetadata={handleLoadedMetadata}
           onEnded={handleVideoEnd}
-          onLoadedData={handleLoadedData}
-          playsInline
         ></video>
       </div>
     </div>
