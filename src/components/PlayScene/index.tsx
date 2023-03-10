@@ -80,6 +80,7 @@ const PlayScene = () => {
   const resetPeopleCount = () => {
     setInsidePeople(0);
     setOutsidePeople(0);
+    videoRef.current!.currentTime = 0;
   };
 
   const updateData = (): void => {
@@ -132,10 +133,11 @@ const PlayScene = () => {
   return (
     <div className={styles.container}>
       <h2>
-        Видео от {videoDate}, {Math.floor(videoTime.currentTime)}/
-        {Math.floor(videoTime.duration)} сек
+        {`Видео от ${videoDate}, ${Math.floor(
+          videoTime.currentTime
+        )}/${Math.floor(videoTime.duration)} сек`}
         <br />
-        Вышло: {outsidePeople}; зашло: {insidePeople}
+        {`Вышло: ${outsidePeople}; зашло: ${insidePeople}`}
       </h2>
       <div className={styles.col}>
         <div>
