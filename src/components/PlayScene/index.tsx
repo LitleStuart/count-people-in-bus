@@ -4,36 +4,41 @@ import { Player } from "./Player";
 import { MaterialButton } from "../MaterialButton";
 import Swal from "sweetalert2";
 
-const getVideoUrl = (): string => {
+const getApexItemValue = (item: string): string => {
   // @ts-ignore
-  return apex.item("P154_VIDEO").getValue();
+  return apex.item(item).getValue();
 };
-
-const getVideoDate = (): string => {
+const setApexItemValue = (item: string, value: string | number) => {
   // @ts-ignore
-  return apex.item("P154_DATE").getValue();
+  apex.item(item).setValue(value);
 };
 
 const getSpeedIcon = (speed: number) => {
   return speed === 1 ? "chevron_right" : "keyboard_double_arrow_right";
 };
-
 const getPlayPauseIcon = (videoIsPlaying: boolean) => {
   return videoIsPlaying ? "pause" : "play_arrow";
 };
 
 const PlayScene = () => {
   const videoRef = React.useRef<HTMLVideoElement>(null);
-  const [videoUrl, setVideoUrl] = React.useState(getVideoUrl());
-  const [insidePeople, setInsidePeople] = React.useState(0);
-  const [outsidePeople, setOutsidePeople] = React.useState(0);
-  const [videoIsPlaying, setVideoIsPlaying] = React.useState(false);
-  const [speed, setSpeed] = React.useState(2);
+  const [videoId, setVideoId] = React.useState(
+    getApexItemValue("P154_ID_VIDEO")
+  );
+  const [videoUrl, setVideoUrl] = React.useState(
+    getApexItemValue("P154_VIDEO")
+  );
+  const [videoDate, setVideoDate] = React.useState(
+    getApexItemValue("P154_DATE")
+  );
   const [videoTime, setVideoTime] = React.useState({
     currentTime: 0,
     duration: 0,
   });
-  const [videoDate, setVideoDate] = React.useState(getVideoDate());
+  const [videoIsPlaying, setVideoIsPlaying] = React.useState(false);
+  const [speed, setSpeed] = React.useState(2);
+  const [insidePeople, setInsidePeople] = React.useState(0);
+  const [outsidePeople, setOutsidePeople] = React.useState(0);
 
   React.useEffect(() => {
     const isIos = () => {
@@ -55,6 +60,29 @@ const PlayScene = () => {
       });
     }
   }, []);
+
+  React.useEffect(() => {
+    if (videoId === "" && videoUrl === "") {
+      // @ts-ignore
+      apex.server
+        .process("get_new_video", {
+          x01: getApexItemValue("P154_BEG_DT"),
+          x02: getApexItemValue("P154_END_DT"),
+          x03: getApexItemValue("P154_VEH"),
+        })
+        .then((result: { id: number; url: string; date: string }) => {
+          setInsidePeople(0);
+          setOutsidePeople(0);
+          setVideoIsPlaying(false);
+          setApexItemValue("P154_ID_VIDEO", result.id);
+          setApexItemValue("P154_VIDEO", result.url);
+          setApexItemValue("P154_DATE", result.date);
+          setVideoId(result.id.toString());
+          setVideoUrl(result.url);
+          setVideoDate(result.date);
+        });
+    }
+  }, [videoId, videoUrl]);
 
   React.useEffect(() => {
     videoRef.current!.playbackRate = speed;
@@ -87,29 +115,23 @@ const PlayScene = () => {
     // @ts-ignore
     apex.server
       .process("send_data", {
-        // @ts-ignore
-        x01: apex.item("P154_VEH").getValue(),
-        // @ts-ignore
-        x02: apex.item("P154_BEG_DT").getValue(),
-        // @ts-ignore
-        x03: apex.item("P154_END_DT").getValue(),
+        x01: getApexItemValue("P154_VEH"),
+        x02: getApexItemValue("P154_BEG_DT"),
+        x03: getApexItemValue("P154_END_DT"),
         x04: insidePeople,
         x05: outsidePeople,
-        // @ts-ignore
-        x06: apex.item("P154_ID_VIDEO").getValue(),
+        x06: videoId,
       })
       .then((result: { id: number; url: string; date: string }) => {
         setInsidePeople(0);
         setOutsidePeople(0);
         setVideoIsPlaying(false);
-        // @ts-ignore
-        apex.item("P154_ID_VIDEO").setValue(result.id);
-        // @ts-ignore
-        apex.item("P154_VIDEO").setValue(result.url);
-        // @ts-ignore
-        apex.item("P154_DATE").setValue(result.date);
-        setVideoDate(result.date);
+        setApexItemValue("P154_ID_VIDEO", result.id);
+        setApexItemValue("P154_VIDEO", result.url);
+        setApexItemValue("P154_DATE", result.date);
+        setVideoId(result.id.toString());
         setVideoUrl(result.url);
+        setVideoDate(result.date);
       });
   };
 
