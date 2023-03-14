@@ -63,6 +63,7 @@ const PlayScene = () => {
 
   React.useEffect(() => {
     if (videoId === "" && videoUrl === "") {
+      setVideoTime({ currentTime: 0, duration: 0 });
       // @ts-ignore
       apex.server
         .process("get_new_video", {
@@ -74,12 +75,21 @@ const PlayScene = () => {
           setInsidePeople(0);
           setOutsidePeople(0);
           setVideoIsPlaying(false);
-          setApexItemValue("P154_ID_VIDEO", result.id);
-          setApexItemValue("P154_VIDEO", result.url);
-          setApexItemValue("P154_DATE", result.date);
-          setVideoId(result.id.toString());
-          setVideoUrl(result.url);
-          setVideoDate(result.date);
+          if (Object.keys(result).length) {
+            setApexItemValue("P154_ID_VIDEO", result.id);
+            setApexItemValue("P154_VIDEO", result.url);
+            setApexItemValue("P154_DATE", result.date);
+            setVideoId(result.id.toString());
+            setVideoUrl(result.url);
+            setVideoDate(result.date);
+          } else {
+            setApexItemValue("P154_ID_VIDEO", "");
+            setApexItemValue("P154_VIDEO", "");
+            setApexItemValue("P154_DATE", "");
+            setVideoId("");
+            setVideoUrl("");
+            setVideoDate("");
+          }
         });
     }
   }, [videoId, videoUrl]);
@@ -126,12 +136,21 @@ const PlayScene = () => {
         setInsidePeople(0);
         setOutsidePeople(0);
         setVideoIsPlaying(false);
-        setApexItemValue("P154_ID_VIDEO", result.id);
-        setApexItemValue("P154_VIDEO", result.url);
-        setApexItemValue("P154_DATE", result.date);
-        setVideoId(result.id.toString());
-        setVideoUrl(result.url);
-        setVideoDate(result.date);
+        if (Object.keys(result).length) {
+          setApexItemValue("P154_ID_VIDEO", result.id);
+          setApexItemValue("P154_VIDEO", result.url);
+          setApexItemValue("P154_DATE", result.date);
+          setVideoId(result.id.toString());
+          setVideoUrl(result.url);
+          setVideoDate(result.date);
+        } else {
+          setApexItemValue("P154_ID_VIDEO", "");
+          setApexItemValue("P154_VIDEO", "");
+          setApexItemValue("P154_DATE", "");
+          setVideoId("");
+          setVideoUrl("");
+          setVideoDate("");
+        }
       });
   };
 
@@ -155,9 +174,11 @@ const PlayScene = () => {
   return (
     <div className={styles.container}>
       <h2>
-        {`Видео от ${videoDate}, ${Math.floor(
-          videoTime.currentTime
-        )}/${Math.floor(videoTime.duration)} сек`}
+        {`${
+          videoDate === "" ? "Нет видео" : "Видео от "
+        } ${videoDate}, ${Math.floor(videoTime.currentTime)}/${Math.floor(
+          videoTime.duration
+        )} сек`}
         <br />
         {`Вышло: ${outsidePeople}; зашло: ${insidePeople}`}
       </h2>
