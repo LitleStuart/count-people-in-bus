@@ -14,7 +14,7 @@ const setApexItemValue = (item: string, value: string | number) => {
 };
 
 const getSpeedIcon = (speed: number) => {
-  return speed === 1 ? "chevron_right" : "keyboard_double_arrow_right";
+  return speed + "x";
 };
 const getPlayPauseIcon = (videoIsPlaying: boolean) => {
   return videoIsPlaying ? "pause" : "play_arrow";
@@ -104,7 +104,7 @@ const PlayScene = () => {
   }, [videoIsPlaying, speed]);
 
   const toggleVideoSpeed = () => {
-    setSpeed((speed % 2) + 1);
+    setSpeed((speed % 3) + 1);
   };
   const incrementCount = () => {
     setInsidePeople(insidePeople + 1);
@@ -194,16 +194,6 @@ const PlayScene = () => {
             icon="refresh"
             handleClick={resetPeopleCount}
           />
-          <MaterialButton
-            className={`${styles.button} ${styles.controlsButton}`}
-            icon="arrow_back"
-            handleClick={() => {
-              // @ts-ignore
-              window.location.href = apex.util.makeApplicationUrl({
-                pageId: 155,
-              });
-            }}
-          />
         </div>
         <MaterialButton
           className={`${styles.button} ${styles.countButton}`}
@@ -238,7 +228,13 @@ const PlayScene = () => {
           <MaterialButton
             className={`${styles.button} ${styles.controlsButton}`}
             handleClick={toggleVideoSpeed}
-            icon={getSpeedIcon(speed)}
+            style={{
+              fontFamily: "'Roboto Mono', monospace",
+              lineHeight: "1.5em",
+              fontSize: "2em",
+              fontWeight: "bold",
+            }}
+            text={getSpeedIcon(speed)}
           />
         </div>
         <MaterialButton
