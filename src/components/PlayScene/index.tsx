@@ -112,6 +112,10 @@ const PlayScene = () => {
         videoRef={videoRef}
         source={videoUrl}
         handleVideoEnd={handleVideoEnd}
+        handlePlayPause={() => {
+          setVideoIsPlaying(!videoRef.current?.paused);
+        }}
+        handleRateChange={() => (videoRef.current!.playbackRate = speed)}
         handleTimeUpdate={() => {
           setVideoTime({
             duration: videoTime.duration,

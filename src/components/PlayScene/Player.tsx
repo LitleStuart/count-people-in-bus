@@ -7,6 +7,8 @@ interface IPlayerProps {
   handleVideoEnd: () => void;
   handleTimeUpdate: () => void;
   handleLoadedMetadata: () => void;
+  handlePlayPause: () => void;
+  handleRateChange: () => void;
 }
 
 export const Player = ({
@@ -15,11 +17,16 @@ export const Player = ({
   handleVideoEnd,
   handleTimeUpdate,
   handleLoadedMetadata,
+  handlePlayPause,
+  handleRateChange,
 }: IPlayerProps) => {
   return (
     <div className={styles.col}>
       <div className={styles.videoMask}>
         <video
+          onPlay={handlePlayPause}
+          onPause={handlePlayPause}
+          onRateChange={handleRateChange}
           controls
           playsInline
           src={source}
