@@ -16,8 +16,10 @@ export const MaterialButton = ({
   icon,
 }: IMaterialButtonProps) => {
   return (
-    <div className={className} onClick={handleClick} style={style}>
-      <span className={icon ? "material-icons-round" : ""}>{icon || text}</span>
+    <div className={className} onClick={handleClick}>
+      <span className={icon ? "material-icons-round" : ""} style={style}>
+        {icon || text}
+      </span>
     </div>
   );
 };

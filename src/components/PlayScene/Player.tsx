@@ -20,6 +20,7 @@ export const Player = ({
     <div className={styles.col}>
       <div className={styles.videoMask}>
         <video
+          controls
           playsInline
           src={source}
           ref={videoRef}
