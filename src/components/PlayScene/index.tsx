@@ -6,7 +6,6 @@ import Swal from "sweetalert2";
 
 const getSpeedIcon = (speed: number) => {
   return speed + "x";
-  // return speed === 1 ? "chevron_right" : "keyboard_double_arrow_right";
 };
 const getPlayPauseIcon = (videoIsPlaying: boolean) => {
   return videoIsPlaying ? "pause" : "play_arrow";
@@ -14,9 +13,11 @@ const getPlayPauseIcon = (videoIsPlaying: boolean) => {
 
 const PlayScene = () => {
   const videoRef = React.useRef<HTMLVideoElement>(null);
+  // eslint-disable-next-line
   const [videoUrl, setVideoUrl] = React.useState(
     "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
   );
+  // eslint-disable-next-line
   const [videoDate, setVideoDate] = React.useState("09.05.2023 09:00");
   const [videoTime, setVideoTime] = React.useState({
     currentTime: 0,
@@ -112,10 +113,6 @@ const PlayScene = () => {
         videoRef={videoRef}
         source={videoUrl}
         handleVideoEnd={handleVideoEnd}
-        handlePlayPause={() => {
-          setVideoIsPlaying(!videoRef.current?.paused);
-        }}
-        handleRateChange={() => (videoRef.current!.playbackRate = speed)}
         handleTimeUpdate={() => {
           setVideoTime({
             duration: videoTime.duration,
