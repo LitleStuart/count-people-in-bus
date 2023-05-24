@@ -24,6 +24,7 @@ const PlayScene = () => {
     duration: 0,
   });
   const [videoIsPlaying, setVideoIsPlaying] = React.useState(false);
+  const [videoWasFinished, setVideoWasFinished] = React.useState(false);
   const [speed, setSpeed] = React.useState(2);
   const [insidePeople, setInsidePeople] = React.useState(0);
   const [outsidePeople, setOutsidePeople] = React.useState(0);
@@ -68,6 +69,7 @@ const PlayScene = () => {
     setOutsidePeople(outsidePeople + 1);
   };
   const handleVideoEnd = () => {
+    setVideoWasFinished(true);
     setVideoIsPlaying(false);
   };
   const resetPeopleCount = () => {
@@ -92,6 +94,7 @@ const PlayScene = () => {
           <MaterialButton
             className={`${styles.button} ${styles.controlsButton}`}
             icon="done"
+            disabled={!videoWasFinished}
           />
           <MaterialButton
             className={`${styles.button} ${styles.controlsButton}`}
@@ -133,11 +136,6 @@ const PlayScene = () => {
             icon={getPlayPauseIcon(videoIsPlaying)}
             className={`${styles.button} ${styles.controlsButton}`}
           />
-          {/* <MaterialButton
-            className={`${styles.button} ${styles.controlsButton}`}
-            handleClick={toggleVideoSpeed}
-            icon={getSpeedIcon(speed)}
-          /> */}
           <MaterialButton
             className={`${styles.button} ${styles.controlsButton}`}
             handleClick={toggleVideoSpeed}

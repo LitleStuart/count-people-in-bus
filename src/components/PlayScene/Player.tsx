@@ -23,7 +23,7 @@ export const Player = ({
     (state) => {
       setCurrentWidth(width + state.delta[0]);
       setVideoTime(
-        Math.ceil(
+        Math.round(
           videoRef.current!.duration *
             (width / timeContainerRef.current!.offsetWidth)
         )
@@ -43,6 +43,7 @@ export const Player = ({
     else if (w > timeContainerRef.current!.offsetWidth)
       setWidth(timeContainerRef.current!.offsetWidth);
     else setWidth(w);
+    console.log(width);
   };
 
   return (
@@ -56,7 +57,7 @@ export const Player = ({
           onTimeUpdate={() => {
             handleTimeUpdate();
             setCurrentWidth(
-              Math.ceil(
+              Math.round(
                 (videoRef.current!.currentTime / videoRef.current!.duration) *
                   timeContainerRef.current!.offsetWidth
               )
