@@ -23,9 +23,11 @@ export const Player = ({
     (state) => {
       setCurrentWidth(width + state.delta[0]);
       setVideoTime(
-        Math.ceil(
-          videoRef.current!.duration *
+        Number(
+          (
+            videoRef.current!.duration *
             (width / timeContainerRef.current!.offsetWidth)
+          ).toFixed(3)
         )
       );
     },
@@ -56,9 +58,11 @@ export const Player = ({
           onTimeUpdate={() => {
             handleTimeUpdate();
             setCurrentWidth(
-              Math.ceil(
-                (videoRef.current!.currentTime / videoRef.current!.duration) *
+              Number(
+                (
+                  (videoRef.current!.currentTime / videoRef.current!.duration) *
                   timeContainerRef.current!.offsetWidth
+                ).toFixed(3)
               )
             );
           }}

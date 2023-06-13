@@ -36,6 +36,7 @@ const PlayScene = () => {
     duration: 0,
   });
   const [videoIsPlaying, setVideoIsPlaying] = React.useState(false);
+  const [videoWasFinished, setVideoWasFinished] = React.useState(false);
   const [speed, setSpeed] = React.useState(2);
   const [insidePeople, setInsidePeople] = React.useState(0);
   const [outsidePeople, setOutsidePeople] = React.useState(0);
@@ -113,7 +114,12 @@ const PlayScene = () => {
     setOutsidePeople(outsidePeople + 1);
   };
   const handleVideoEnd = () => {
+    setVideoWasFinished(true);
     setVideoIsPlaying(false);
+  };
+  const handlePlayPauseButton = () => {
+    if (videoRef.current?.currentTime !== videoRef.current?.duration)
+      setVideoIsPlaying(!videoIsPlaying);
   };
   const resetPeopleCount = () => {
     setInsidePeople(0);
@@ -122,6 +128,16 @@ const PlayScene = () => {
   };
 
   const updateData = (): void => {
+    type successResponse = {
+      code: "ok";
+      id: number;
+      url: string;
+      date: string;
+    };
+    type errorSavingResult = { code: "error"; error: "saving" };
+    type errorGettingVideo = { code: "error"; error: "get_video" };
+    type responseType = successResponse | errorGettingVideo | errorSavingResult;
+
     // @ts-ignore
     apex.server
       .process("send_data", {
@@ -132,11 +148,12 @@ const PlayScene = () => {
         x05: outsidePeople,
         x06: videoId,
       })
-      .then((result: { id: number; url: string; date: string }) => {
-        setInsidePeople(0);
-        setOutsidePeople(0);
-        setVideoIsPlaying(false);
-        if (Object.keys(result).length) {
+      .then((result: responseType) => {
+        if (result.code === "ok") {
+          setInsidePeople(0);
+          setOutsidePeople(0);
+          setVideoIsPlaying(false);
+          setVideoWasFinished(false);
           setApexItemValue("P154_ID_VIDEO", result.id);
           setApexItemValue("P154_VIDEO", result.url);
           setApexItemValue("P154_DATE", result.date);
@@ -144,12 +161,19 @@ const PlayScene = () => {
           setVideoUrl(result.url);
           setVideoDate(result.date);
         } else {
-          setApexItemValue("P154_ID_VIDEO", "");
-          setApexItemValue("P154_VIDEO", "");
-          setApexItemValue("P154_DATE", "");
-          setVideoId("");
-          setVideoUrl("");
-          setVideoDate("");
+          Swal.fire({
+            title: "Ошибка при сохранении результатов подсчета",
+            icon: "error",
+            showCancelButton: true,
+            cancelButtonText: "Отмена",
+            showConfirmButton: true,
+            confirmButtonText: "Повтор",
+            confirmButtonColor: "#9086ff",
+          }).then((result) => {
+            if (result.isConfirmed) {
+              updateData();
+            }
+          });
         }
       });
   };
@@ -187,7 +211,8 @@ const PlayScene = () => {
           <MaterialButton
             className={`${styles.button} ${styles.controlsButton}`}
             icon="done"
-            handleClick={confirmData}
+            handleClick={updateData}
+            disabled={!videoWasFinished}
           />
           <MaterialButton
             className={`${styles.button} ${styles.controlsButton}`}
@@ -221,7 +246,7 @@ const PlayScene = () => {
       <div className={styles.col}>
         <div>
           <MaterialButton
-            handleClick={() => setVideoIsPlaying(!videoIsPlaying)}
+            handleClick={handlePlayPauseButton}
             icon={getPlayPauseIcon(videoIsPlaying)}
             className={`${styles.button} ${styles.controlsButton}`}
           />

@@ -6,6 +6,7 @@ interface IMaterialButtonProps {
   text?: string;
   className?: string;
   style?: React.CSSProperties;
+  disabled?: boolean;
 }
 
 export const MaterialButton = ({
@@ -14,9 +15,10 @@ export const MaterialButton = ({
   className,
   style,
   icon,
+  disabled,
 }: IMaterialButtonProps) => {
   return (
-    <div className={className} onClick={handleClick}>
+    <div className={className} onClick={disabled ? () => {} : handleClick}>
       <span className={icon ? "material-icons-round" : ""} style={style}>
         {icon || text}
       </span>
