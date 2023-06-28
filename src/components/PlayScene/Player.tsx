@@ -1,50 +1,30 @@
 import React from "react";
 import styles from "./PlayScene.module.scss";
-import { useDrag } from "@use-gesture/react";
+import ScrollBar from "./ScrollBar";
 
-interface IPlayerProps {
-  source: string;
+interface IPlayerProps extends React.VideoHTMLAttributes<HTMLVideoElement> {
   videoRef: React.RefObject<HTMLVideoElement>;
-  handleVideoEnd: () => void;
-  handleTimeUpdate: () => void;
-  handleLoadedMetadata: () => void;
+  currentTime: number;
+  duration: number;
 }
 
 export const Player = ({
-  source,
   videoRef,
-  handleVideoEnd,
-  handleTimeUpdate,
-  handleLoadedMetadata,
+  currentTime,
+  duration,
+  ...rest
 }: IPlayerProps) => {
-  const [width, setWidth] = React.useState(0);
-  const timeContainerRef = React.useRef<HTMLDivElement>(null);
-  const bind = useDrag(
-    (state) => {
-      setCurrentWidth(width + state.delta[0]);
-      setVideoTime(
-        Number(
-          (
-            videoRef.current!.duration *
-            (width / timeContainerRef.current!.offsetWidth)
-          ).toFixed(3)
-        )
-      );
-    },
-    { axis: "x" }
-  );
-
   const setVideoTime = (time: number) => {
     if (time < 0) videoRef.current!.currentTime = 0;
     else if (time > videoRef.current!.duration)
       videoRef.current!.currentTime = videoRef.current!.duration;
     else videoRef.current!.currentTime = time;
   };
-  const setCurrentWidth = (w: number) => {
-    if (w < 0) setWidth(0);
-    else if (w > timeContainerRef.current!.offsetWidth)
-      setWidth(timeContainerRef.current!.offsetWidth);
-    else setWidth(w);
+
+  const handleWidthChange = (widthPercentage: number) => {
+    setVideoTime(
+      Number((videoRef.current!.duration * widthPercentage).toFixed(3))
+    );
   };
 
   return (
@@ -52,32 +32,14 @@ export const Player = ({
       <div className={styles.videoMask}>
         <video
           playsInline
-          src={source}
           ref={videoRef}
           className={styles.player}
-          onTimeUpdate={() => {
-            handleTimeUpdate();
-            setCurrentWidth(
-              Number(
-                (
-                  (videoRef.current!.currentTime / videoRef.current!.duration) *
-                  timeContainerRef.current!.offsetWidth
-                ).toFixed(3)
-              )
-            );
-          }}
-          onLoadedMetadata={handleLoadedMetadata}
-          onEnded={handleVideoEnd}
+          {...rest}
         ></video>
-        <div
-          className={styles.timeContainer}
-          {...bind()}
-          ref={timeContainerRef}
-        >
-          <div className={styles.currentTime} style={{ width: width + "px" }}>
-            &nbsp;
-          </div>
-        </div>
+        <ScrollBar
+          onWidthChange={handleWidthChange}
+          timePercentage={Number((currentTime / duration).toFixed(3))}
+        />
       </div>
     </div>
   );

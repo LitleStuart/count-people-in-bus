@@ -3,25 +3,18 @@ import styles from "./PlayScene.module.scss";
 import { Player } from "./Player";
 import { MaterialButton } from "../MaterialButton";
 import Swal from "sweetalert2";
-
-const getApexItemValue = (item: string): string => {
-  // @ts-ignore
-  return apex.item(item).getValue();
-};
-const setApexItemValue = (item: string, value: string | number) => {
-  // @ts-ignore
-  apex.item(item).setValue(value);
-};
-
-const getSpeedIcon = (speed: number) => {
-  return speed + "x";
-};
-const getPlayPauseIcon = (videoIsPlaying: boolean) => {
-  return videoIsPlaying ? "pause" : "play_arrow";
-};
+import {
+  getApexItemValue,
+  getPlayPauseIcon,
+  getSpeedIcon,
+  setApexItemValue,
+  handleIosPwaInstall,
+  handleChangeCount,
+} from "../../helpers";
 
 const PlayScene = () => {
   const videoRef = React.useRef<HTMLVideoElement>(null);
+  const containerRef = React.useRef<HTMLDivElement>(null);
   const [videoId, setVideoId] = React.useState(
     getApexItemValue("P154_ID_VIDEO")
   );
@@ -41,26 +34,7 @@ const PlayScene = () => {
   const [insidePeople, setInsidePeople] = React.useState(0);
   const [outsidePeople, setOutsidePeople] = React.useState(0);
 
-  React.useEffect(() => {
-    const isIos = () => {
-      const userAgent = window.navigator.userAgent.toLowerCase();
-      return /iphone|ipad|ipod/.test(userAgent);
-    };
-    const isInStandaloneMode = () =>
-      // @ts-ignore
-      "standalone" in window.navigator && window.navigator.standalone;
-
-    if (isIos() && !isInStandaloneMode()) {
-      Swal.fire({
-        title: "Установите приложение",
-        text: 'Нажмите на кнопку поделиться, а затем на кнопку "Добавить на главный экран" ("Add to homescreen")',
-        showConfirmButton: true,
-        confirmButtonText: "Хорошо",
-        showCancelButton: false,
-        confirmButtonColor: "#9086ff",
-      });
-    }
-  }, []);
+  React.useEffect(handleIosPwaInstall, []);
 
   React.useEffect(() => {
     if (videoId === "" && videoUrl === "") {
@@ -109,9 +83,11 @@ const PlayScene = () => {
   };
   const incrementCount = () => {
     setInsidePeople(insidePeople + 1);
+    handleChangeCount(containerRef);
   };
   const decrementCount = () => {
     setOutsidePeople(outsidePeople + 1);
+    handleChangeCount(containerRef);
   };
   const handleVideoEnd = () => {
     setVideoWasFinished(true);
@@ -125,6 +101,18 @@ const PlayScene = () => {
     setInsidePeople(0);
     setOutsidePeople(0);
     videoRef.current!.currentTime = 0;
+  };
+  const handleLoadedMetadata = () => {
+    setVideoTime({
+      currentTime: 0,
+      duration: videoRef.current!.duration,
+    });
+  };
+  const handleTimeUpdate = () => {
+    setVideoTime({
+      duration: videoTime.duration,
+      currentTime: videoRef.current!.currentTime,
+    });
   };
 
   const updateData = (): void => {
@@ -178,25 +166,8 @@ const PlayScene = () => {
       });
   };
 
-  const confirmData = () => {
-    const confirmMessage = `Вышло ${outsidePeople}, зашло ${insidePeople}`;
-    Swal.fire({
-      title: "Подтверждение",
-      text: confirmMessage,
-      showConfirmButton: true,
-      confirmButtonText: "Да",
-      showCancelButton: true,
-      cancelButtonText: "Отмена",
-      confirmButtonColor: "#9086ff",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        updateData();
-      }
-    });
-  };
-
   return (
-    <div className={styles.container}>
+    <div className={styles.container} ref={containerRef}>
       <h2>
         {`${
           videoDate === "" ? "Нет видео" : "Видео от "
@@ -227,21 +198,13 @@ const PlayScene = () => {
         />
       </div>
       <Player
+        currentTime={videoTime.currentTime}
+        duration={videoTime.duration}
         videoRef={videoRef}
-        source={videoUrl}
-        handleVideoEnd={handleVideoEnd}
-        handleTimeUpdate={() => {
-          setVideoTime({
-            duration: videoTime.duration,
-            currentTime: videoRef.current!.currentTime,
-          });
-        }}
-        handleLoadedMetadata={() => {
-          setVideoTime({
-            currentTime: 0,
-            duration: videoRef.current!.duration,
-          });
-        }}
+        src={videoUrl}
+        onEnded={handleVideoEnd}
+        onLoadedMetadata={handleLoadedMetadata}
+        onTimeUpdate={handleTimeUpdate}
       />
       <div className={styles.col}>
         <div>
