@@ -1,8 +1,8 @@
 import "./App.css";
-import PlayScene from "./components/PlayScene";
+import MainMenu from "./components/MainMenu/index";
 
 function App() {
-  return <PlayScene />;
+  return <MainMenu />;
 }
 
 export default App;

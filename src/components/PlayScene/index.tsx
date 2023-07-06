@@ -3,16 +3,17 @@ import styles from "./PlayScene.module.scss";
 import { Player } from "./Player";
 import { MaterialButton } from "../MaterialButton";
 import Swal from "sweetalert2";
+import useSound from "use-sound";
 import {
   getApexItemValue,
   getPlayPauseIcon,
   getSpeedIcon,
-  setApexItemValue,
   handleIosPwaInstall,
   handleChangeCount,
+  responseType,
 } from "../../helpers";
 
-const PlayScene = () => {
+const PlayScene = ({ paused }: { paused?: boolean }) => {
   const videoRef = React.useRef<HTMLVideoElement>(null);
   const containerRef = React.useRef<HTMLDivElement>(null);
   const [videoId, setVideoId] = React.useState(
@@ -33,6 +34,8 @@ const PlayScene = () => {
   const [speed, setSpeed] = React.useState(2);
   const [insidePeople, setInsidePeople] = React.useState(0);
   const [outsidePeople, setOutsidePeople] = React.useState(0);
+  //@ts-ignore
+  const [play] = useSound(pathToClickSound);
 
   React.useEffect(handleIosPwaInstall, []);
 
@@ -46,28 +49,33 @@ const PlayScene = () => {
           x02: getApexItemValue("P154_END_DT"),
           x03: getApexItemValue("P154_VEH"),
         })
-        .then((result: { id: number; url: string; date: string }) => {
+        .then((result: responseType) => {
           setInsidePeople(0);
           setOutsidePeople(0);
           setVideoIsPlaying(false);
-          if (Object.keys(result).length) {
-            setApexItemValue("P154_ID_VIDEO", result.id);
-            setApexItemValue("P154_VIDEO", result.url);
-            setApexItemValue("P154_DATE", result.date);
+          if (result.code === "ok") {
             setVideoId(result.id.toString());
             setVideoUrl(result.url);
             setVideoDate(result.date);
           } else {
-            setApexItemValue("P154_ID_VIDEO", "");
-            setApexItemValue("P154_VIDEO", "");
-            setApexItemValue("P154_DATE", "");
             setVideoId("");
             setVideoUrl("");
             setVideoDate("");
+            Swal.fire({
+              title: "Ошибка при получении видео",
+              icon: "error",
+              showConfirmButton: true,
+              confirmButtonText: "Ок",
+              confirmButtonColor: "#9086ff",
+            });
           }
         });
     }
   }, [videoId, videoUrl]);
+
+  React.useEffect(() => {
+    if (videoIsPlaying) setVideoIsPlaying(!paused);
+  }, [paused, videoIsPlaying]);
 
   React.useEffect(() => {
     videoRef.current!.playbackRate = speed;
@@ -84,10 +92,12 @@ const PlayScene = () => {
   const incrementCount = () => {
     setInsidePeople(insidePeople + 1);
     handleChangeCount(containerRef);
+    play();
   };
   const decrementCount = () => {
     setOutsidePeople(outsidePeople + 1);
     handleChangeCount(containerRef);
+    play();
   };
   const handleVideoEnd = () => {
     setVideoWasFinished(true);
@@ -116,16 +126,6 @@ const PlayScene = () => {
   };
 
   const updateData = (): void => {
-    type successResponse = {
-      code: "ok";
-      id: number;
-      url: string;
-      date: string;
-    };
-    type errorSavingResult = { code: "error"; error: "saving" };
-    type errorGettingVideo = { code: "error"; error: "get_video" };
-    type responseType = successResponse | errorGettingVideo | errorSavingResult;
-
     // @ts-ignore
     apex.server
       .process("send_data", {
@@ -142,9 +142,6 @@ const PlayScene = () => {
           setOutsidePeople(0);
           setVideoIsPlaying(false);
           setVideoWasFinished(false);
-          setApexItemValue("P154_ID_VIDEO", result.id);
-          setApexItemValue("P154_VIDEO", result.url);
-          setApexItemValue("P154_DATE", result.date);
           setVideoId(result.id.toString());
           setVideoUrl(result.url);
           setVideoDate(result.date);
